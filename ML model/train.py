@@ -56,3 +56,32 @@ def main():
         base_model,
         GlobalMaxPooling2D()
     ])
+
+    model.summary()
+
+    # Parallel apply
+    map_embeddings = df['image'].swifter.apply(
+        lambda img: get_embedding(model, img))
+    df_embs = map_embeddings.apply(pd.Series)
+
+    # Create a dictionary where the key is the df id and the value is the index
+    # of the row in the dataframe
+    id_to_index = {}
+    for index, row in df.iterrows():
+        id_to_index[row['id']] = index
+
+    # Calculate the cosine similarity matrix
+    cosine_sim = 1-pairwise_distances(df_embs, metric='cosine')
+    cosine_sim_json = cosine_sim.tolist()
+
+    # Save the cosine similarity matrix as a json file
+    with open('cosine_sim.json', 'w') as f:
+        json.dump(cosine_sim_json, f)
+
+    # Save the id_to_index dictionary as a json file
+    with open('id_to_index.json', 'w') as f:
+        json.dump(id_to_index, f)
+
+
+if __name__ == '__main__':
+    main()
