@@ -19,6 +19,7 @@ numberOfRowsToRead = 500
 img_width, img_height = 224, 224
 
 
+
 # Gets the path to the image
 def img_path(img):
     return DATASET_PATH+"/images/"+img
@@ -38,6 +39,24 @@ def get_embedding(model, img_name):
     return model.predict(x).reshape(-1)
 
 
+def main():
+    # Read the csv file into a pandas dataframe
+    df = pd.read_csv(os.path.join(DATASET_PATH, 'styles.csv'),
+                     nrows=numberOfRowsToRead)
+    # Add the image name to the dataframe
+    df['image'] = df.apply(lambda row: str(row['id']) + ".jpg", axis=1)
+    df = df.reset_index(drop=True)
 
+    # Pre-Trained Model
+    base_model = ResNet50(weights='imagenet',
+                          include_top=False,
+                          input_shape=(img_width, img_height, 3))
+    base_model.trainable = False
+
+    # Add Layer Embedding
+    model = tf.keras.Sequential([
+        base_model,
+        GlobalMaxPooling2D()
+    ])
 
 
