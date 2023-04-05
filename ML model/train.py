@@ -57,6 +57,7 @@ def main():
         GlobalMaxPooling2D()
     ])
 
+
     model.summary()
 
     # Parallel apply
@@ -85,3 +86,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+
