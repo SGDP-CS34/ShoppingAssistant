@@ -19,7 +19,6 @@ numberOfRowsToRead = 500
 img_width, img_height = 224, 224
 
 
-
 # Gets the path to the image
 def img_path(img):
     return DATASET_PATH+"/images/"+img
@@ -37,7 +36,6 @@ def get_embedding(model, img_name):
     # Pre process Input
     x = preprocess_input(x)
     return model.predict(x).reshape(-1)
-
 
 def main():
     # Read the csv file into a pandas dataframe
@@ -58,5 +56,3 @@ def main():
         base_model,
         GlobalMaxPooling2D()
     ])
-
-
