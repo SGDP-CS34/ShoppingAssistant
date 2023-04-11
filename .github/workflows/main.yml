@@ -51,6 +51,4 @@ jobs:
           cd /home/developer/Frontend
           pm2 start "npm run dev" --name Frontend &
           cd /home/developer/Backend
-          export NVM_DIR=~/.nvm
-          source ~/.nvm/nvm.sh
-          NODE_ENV=production pm2 start "sails lift" --name Backend
+          pm2 start "sails lift" --name Backend
