@@ -48,6 +48,8 @@ jobs:
         username: ${{ secrets.AZURE_VM_USERNAME }}
         password: ${{ secrets.AZURE_VM_PASSWORD }}
         script: |
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh &
           cd /home/developer/Frontend
           pm2 start "npm run dev" --name Frontend &
           cd /home/developer/Backend
