@@ -49,10 +49,8 @@ jobs:
         password: ${{ secrets.AZURE_VM_PASSWORD }}
         script: |
           cd /home/developer/Frontend
-          export NVM_DIR=~/.nvm
-          source ~/.nvm/nvm.sh
-          npm run dev &
+          pm2 start "npm run dev" --name Frontend &
           cd /home/developer/Backend
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
-          NODE_ENV=production sails lift
+          NODE_ENV=production pm2 start "sails lift" --name Backend
