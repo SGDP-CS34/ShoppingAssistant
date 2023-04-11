@@ -27,7 +27,7 @@ jobs:
         username: ${{ secrets.AZURE_VM_USERNAME }}
         password: ${{ secrets.AZURE_VM_PASSWORD }}
         source: ./Frontend
-        target: /home/developer/frontend
+        target: /home/developer
 
     - name: Install dependencies for Backend
       run: npm ci --prefix Backend
@@ -39,7 +39,7 @@ jobs:
         username: ${{ secrets.AZURE_VM_USERNAME }}
         password: ${{ secrets.AZURE_VM_PASSWORD }}
         source: ./Backend
-        target: /home/developer/backend
+        target: /home/developer
 
     - name: SSH to Azure VM and start app
       uses: appleboy/ssh-action@master
@@ -48,5 +48,7 @@ jobs:
         username: ${{ secrets.AZURE_VM_USERNAME }}
         password: ${{ secrets.AZURE_VM_PASSWORD }}
         script: |
-          cd /home/developer/frontend
-          npm run dev
+          cd /home/developer/Frontend
+          pm2 start "npm run dev" --name Frontend &
+          cd /home/developer/Backend
+          NODE_ENV=production pm2 start "sails lift" --name Backend
